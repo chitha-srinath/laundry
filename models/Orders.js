@@ -3,8 +3,8 @@ const Schema = mongoose.Schema;
 
 const orderSchema = new Schema ({
     userId: { type: Schema.Types.ObjectId, ref: 'User' },
-    orderId: { type: Number, unique: true },
-    date: { type: Date, default: Date.now() },
+    orderId: { type: Number},
+    date: { type: Number },
     productList: [{
         prodType: String,
         quantity: { type: Number, default: 0 },
@@ -14,8 +14,8 @@ const orderSchema = new Schema ({
         pack: { type: String, default: "false" },
         price: { type: Number, default: 0 }
     }],
-    totalPrice: Number,
-    totalNoOfItems: Number,
+    totalPrice: {type:Number},
+    totalNoOfItems: {type: Number},
     // store: { type: String, default: "JP Nagar" },
     // city: { type: String, default: "Bangalore" },
     // phone: { type: Number, default: 9952647123 },

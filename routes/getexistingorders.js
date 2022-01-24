@@ -6,9 +6,10 @@ const orderschema = require("../models/Orders");
 app.use(bodyparser);
 const router = express.Router();
 
-router.get("/api/orderhistory", async(req,res)=>{
+router.get("/orderhistory", async(req,res)=>{
     try{
-    const orders = await orderschema.find();
+    const orders = await orderschema.find({userId:req.user});
+    console.log(orders);
     res.status(200).json({
         status: "success",
         orders : orders
@@ -22,9 +23,9 @@ router.get("/api/orderhistory", async(req,res)=>{
     }
 });
 
-router.get("/api/:id", async(req,res)=>{
+router.get("/:id", async(req,res)=>{
     try{
-    const order = await orderschema.findOne({orderId:req.params.id});
+    const order = await orderschema.findOne({orderId:req.params.id, userId : req.user} );
     res.status(200).json({
         status: "success",
         order : order

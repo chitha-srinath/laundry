@@ -6,13 +6,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 // ------ DB Connection ------
-mongoose.connect("mongodb+srv://chitha_srinath:Srinath@1234@cluster0.ofweo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
-mongoose.connection.on("connected", () => {
-    console.log("DB connected");
-})
-mongoose.connection.on("error", (e) => {
-    console.log("Error connecting to DB", e);
-})
+mongoose.connect("mongodb+srv://team2:laundryservice@cluster0.e04ub.mongodb.net/Laundry?retryWrites=true&w=majority")
+.then(()=>console.log("conection successful")).catch((e)=>console.log("connection failed",e));
 // ------ DB Connection ------
 
 const app = express();
@@ -30,7 +25,8 @@ const User = require('./models/User');
 // ------ Importing models ------
 
 // authentication middleware
-app.use('/api/v1', async (req, res, next) => {
+app.use('/', loginRoute);
+const auth = async (req, res, next) => {
     try {
         const token = req.headers.authorization.split(" ")[1];
         if (!token) {
@@ -39,8 +35,8 @@ app.use('/api/v1', async (req, res, next) => {
             jwt.verify(token, 'thisissecrettokenforlaundryserviceproject12@#', async (err, decoded) => {
                 if (err) {
                     return res.status(403).send('Invalid token');
-                }
-                const user_u = await User.findOne({ _id: decoded.data });
+                }    
+                const user_u = await User.findOne({ _id: decoded.data })
                 req.user = user_u._id;
                 next();
             })
@@ -51,11 +47,10 @@ app.use('/api/v1', async (req, res, next) => {
             message: 'User not found'
         });
     }
-});
-
-app.use('/api/v1', loginRoute);
-app.use('/api/v1', orderRoute);
-app.use('/api/v1', existingOrders);
+};
+// app.use('/', loginRoute);
+app.use('/',auth, orderRoute);
+app.use('/',auth, existingOrders);
 
 // ------ Server start ------
 app.listen(2000, () => console.log('Server is running on port 2000'));

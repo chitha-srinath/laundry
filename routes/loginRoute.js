@@ -8,7 +8,8 @@ router.post('/register', async (req, res) => {
 	try {
 		const { name, email, phone, password, state, district, address, pin } = req.body;
 		const hashed_pass = await bcrypt.hash(password, 10);
-		await User.create({ name, email, phone, password: hashed_pass, state, district, address, pin }).save();
+		const user = await User.create({ name, email, phone, password: hashed_pass, state, district, address, pin });
+		user.save();
 		res.status(200).json({
 			message: "User registered successfully."
 		});
@@ -39,8 +40,8 @@ router.post('/login', async (req, res) => {
 		}, 'thisissecrettokenforlaundryserviceproject12@#');
 		
 		res.status(202).json({
-			data: token,
-			phone: user.phone
+			status: "token generated sucessfully",
+			token : token
 		});
 	} catch (err) {
 		res.status(500).json({

@@ -6,15 +6,20 @@ const router = express.Router();
 router.post('/createorder', async function(req, res){
     try { 
         const { orderId, productList, totalNoOFItems, totalPrice } = req.body 
+        const userid = req.user
+        console.log(" userid is " + userid)
         const order = await Orders.create({ 
-            orderId, productList, totalNoOFItems, totalPrice
+             userId:userid, orderId, productList, totalNoOFItems, totalPrice
         });
         return res.status(200).json({  
             message: "Order Succesfully Placed",
             order
         });
     } catch(err) {
-        res.status(500).send("There was some error placing the order.");
+        res.status(500).json({
+            status: "invalid",
+            message: err.message
+        })
     }
 });
 
