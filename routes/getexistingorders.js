@@ -6,16 +6,16 @@ const orderschema = require("../models/Orders");
 app.use(bodyparser);
 const router = express.Router();
 
-router.get("/orderhistory", async(req,res)=>{
-    try{
-    const orders = await orderschema.find({userId:req.user});
-    console.log(orders);
-    res.status(200).json({
-        status: "success",
-        orders : orders
-    })
+router.get("/orderhistory", async (req, res) => {
+    try {
+        const orders = await orderschema.find({ userId: req.user });
+        console.log(orders);
+        res.status(200).json({
+            status: "success",
+            orders: orders
+        })
 
-    }catch (e){
+    } catch (e) {
         res.json({
             status: "failed",
             message: e.message
@@ -23,15 +23,36 @@ router.get("/orderhistory", async(req,res)=>{
     }
 });
 
-router.get("/:id", async(req,res)=>{
-    try{
-    const order = await orderschema.findOne({orderId:req.params.id, userId : req.user} );
-    res.status(200).json({
-        status: "success",
-        order : order
-    })
+router.get("/:id", async (req, res) => {
+    try {
+        const order = await orderschema.findOne({ orderId: req.params.id, userId: req.user });
+        res.status(200).json({
+            status: "success",
+            order: order
+        })
 
-    }catch (e){
+    } catch (e) {
+        res.json({
+            status: "failed",
+            message: e.message
+        });
+    }
+});
+router.put("/:id", async (req, res) => {
+    try {
+        const order = await orderschema.updateOne({ orderId: req.params.id, userId: req.user }, {
+            $set: {
+                orderStatus
+                    :
+                    "Cancelled"
+            }
+        });
+        res.status(200).json({
+            status: "success",
+            order: order
+        })
+
+    } catch (e) {
         res.json({
             status: "failed",
             message: e.message

@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 
 // ------ DB Connection ------
 mongoose.connect("mongodb+srv://team2:laundryservice@cluster0.e04ub.mongodb.net/Laundry?retryWrites=true&w=majority")
-.then(()=>console.log("conection successful")).catch((e)=>console.log("connection failed",e));
+.then(()=>console.log("connection successful")).catch((e)=>console.log("connection failed", e));
 // ------ DB Connection ------
 
 const app = express();
@@ -30,7 +30,9 @@ const auth = async (req, res, next) => {
     try {
         const token = req.headers.authorization.split(" ")[1];
         if (!token) {
-            return res.status(403).send('Request not valid');
+            return res.status(403).json({
+                message: "Request not valid"
+            })
         } else {
             jwt.verify(token, 'thisissecrettokenforlaundryserviceproject12@#', async (err, decoded) => {
                 if (err) {
@@ -38,6 +40,7 @@ const auth = async (req, res, next) => {
                 }    
                 const user_u = await User.findOne({ _id: decoded.data })
                 req.user = user_u._id;
+                // console.log(user_u)
                 next();
             })
         }

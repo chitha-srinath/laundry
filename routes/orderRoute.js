@@ -5,11 +5,11 @@ const router = express.Router();
 // ------ create an order using post api ------
 router.post('/createorder', async function(req, res){
     try { 
-        const { orderId, productList, totalNoOFItems, totalPrice } = req.body 
+        const { orderId, productList,totalNoOfItems, totalPrice } = req.body 
         const userid = req.user
         console.log(" userid is " + userid)
         const order = await Orders.create({ 
-             userId:userid, orderId, productList, totalNoOFItems, totalPrice
+             userId:userid, orderId, productList, totalNoOfItems, totalPrice
         });
         return res.status(200).json({  
             message: "Order Succesfully Placed",

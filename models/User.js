@@ -12,4 +12,5 @@ const userSchema = new Schema({
 	pin: { type: Number, required: true }
 });
 
+
 module.exports = mongoose.model('User', userSchema);

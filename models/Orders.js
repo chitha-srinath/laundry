@@ -22,4 +22,5 @@ const orderSchema = new Schema ({
     orderStatus: { type: String, default: "Ready to pickup" }
 });
 
+
 module.exports = new mongoose.model('Orders', orderSchema);
